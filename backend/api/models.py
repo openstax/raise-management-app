@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from pydantic import BaseModel
 from enum import Enum
 
@@ -33,6 +33,9 @@ class StudyStatus(BaseModel):
     status: StudyStatusValues
 
 
-class StudyResponse(StudyBase, StudyStatus):
+class Study(StudyBase, StudyStatus):
     """Study response model"""
-    id: int
+    id: Optional[int] = None
+
+    class Config:
+        orm_mode = True

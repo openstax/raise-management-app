@@ -1,7 +1,9 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
-from .database import Base
+
+Base = declarative_base()
 
 
 class Study(Base):
