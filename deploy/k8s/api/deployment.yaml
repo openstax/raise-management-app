@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rma-api
+  labels:
+    app: rma-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rma-api
+  template:
+    metadata:
+      labels:
+        app: rma-api
+    spec:
+      containers:
+        - name: rma-backend
+          image: REPLACED_IN_PIPELINE
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rma-database-creds
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rma-database-creds
+                  key: password
+            - name: POSTGRES_DB
+              value: rma
+            - name: POSTGRES_SERVER
+              value: REPLACED_IN_PIPELINE
+          command:
+            - uvicorn
+          args:
+            - api.main:app
+            - --host
+            - "0.0.0.0"
+            - --port
+            - "80"
+            - --root-path
+            - /api
+          ports:
+            - containerPort: 80

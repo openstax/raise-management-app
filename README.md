@@ -42,7 +42,7 @@ Backend tests and linter checks can be run using scripts:
 
 ```bash
 $ ./backend/scripts/test.sh
-$ ./backend/script/lint.sh
+$ ./backend/scripts/lint.sh
 ```
 
 In local environments, the generated HTML coverage report at `./backend/htmlcov/index.html` can be opened to view coverage details.

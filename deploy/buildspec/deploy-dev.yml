@@ -1,0 +1,28 @@
+version: 0.2
+
+env:
+  shell: bash
+  secrets-manager:
+    POSTGRES_USER: "rds-raise-dev:username"
+    POSTGRES_PASSWORD: "rds-raise-dev:password"
+
+phases:
+  install:
+    commands:
+      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - curl -L -o yq "https://github.com/mikefarah/yq/releases/download/v4.13.4/yq_linux_amd64"
+      - chmod +x ./kubectl ./yq
+      - export PATH=$PWD:$PATH
+  pre_build:
+    commands:
+      - aws eks update-kubeconfig --name $K8S_CLUSTER_NAME
+      - export BACKEND_IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR_build_output/backend-image-tag.txt)
+      - export K8S_DIR=deploy/k8s
+      - yq e -i '.stringData.username=strenv(POSTGRES_USER)' $K8S_DIR/api/secret.yaml
+      - yq e -i '.stringData.password=strenv(POSTGRES_PASSWORD)' $K8S_DIR/api/secret.yaml
+      - yq e -i '.spec.template.spec.containers[0].image=strenv(BACKEND_IMAGE_TAG)' $K8S_DIR/api/deployment.yaml
+      - yq e -i '.spec.template.spec.containers[0].env[] |= select(.name=="POSTGRES_SERVER").value=strenv(POSTGRES_SERVER)' $K8S_DIR/api/deployment.yaml
+      - yq e -i '.spec.routes[].match="Host(`rma-dev.raise.openstax.org`) && PathPrefix(`/api`)"' $K8S_DIR/api/ingressroute.yaml
+  build:
+    commands:
+      - kubectl apply -R -f $K8S_DIR

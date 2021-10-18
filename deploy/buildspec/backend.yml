@@ -1,0 +1,24 @@
+version: 0.2
+
+env:
+  shell: bash
+  secrets-manager:
+    DOCKERHUB_USERNAME: "dockerhub:username"
+    DOCKERHUB_TOKEN: "dockerhub:token"
+
+phases:
+  pre_build:
+    commands:
+      - echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USERNAME --password-stdin
+      - export IMAGE_TAG=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:${COMMIT_ID:0:8}
+      - echo $IMAGE_TAG > backend-image-tag.txt
+  build:
+    commands:
+      - docker build backend/. -t $IMAGE_TAG
+  post_build:
+    commands:
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - docker push $IMAGE_TAG
+artifacts:
+  files:
+    - backend-image-tag.txt
