@@ -1,5 +1,17 @@
 version: "3.8"
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile${FE_DOCKERFILE_EXT:-}
+    volumes:
+      - ./frontend:/code
+    ports:
+      - 3000:80
+    networks:
+      - raise
+    depends_on:
+      - api
   api:
     build:
       context: ./backend
