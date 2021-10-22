@@ -1,5 +1,6 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
+import { authenticateUser } from './aws-cognito'
 
 interface SigninValues {
   username: string
@@ -18,7 +19,12 @@ const SigninForm = (): JSX.Element => {
   })
 
   const handleSubmit = async (values: SigninValues, actions: FormikHelpers<SigninValues>): Promise<void> => {
-    // TODO: Implement handler
+    try {
+      await authenticateUser(values.username, values.password)
+      console.log('Successful login')
+    } catch (error: any) {
+      console.log(error.message)
+    }
     actions.resetForm()
   }
 
