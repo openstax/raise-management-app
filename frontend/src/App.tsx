@@ -1,8 +1,12 @@
 import SigninForm from './SigninForm'
+import Signout from './Signout'
 
 const App = (): JSX.Element => {
   return (
-    <SigninForm />
+    <>
+      <Signout />
+      <SigninForm />
+    </>
   )
 }
 

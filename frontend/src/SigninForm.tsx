@@ -1,6 +1,8 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
+import { signin } from './auth-slice'
 import { authenticateUser } from './aws-cognito'
+import { useAppDispatch } from './hooks'
 
 interface SigninValues {
   username: string
@@ -8,6 +10,8 @@ interface SigninValues {
 }
 
 const SigninForm = (): JSX.Element => {
+  const dispatch = useAppDispatch()
+
   const initialValues: SigninValues = {
     username: '',
     password: ''
@@ -20,7 +24,8 @@ const SigninForm = (): JSX.Element => {
 
   const handleSubmit = async (values: SigninValues, actions: FormikHelpers<SigninValues>): Promise<void> => {
     try {
-      await authenticateUser(values.username, values.password)
+      const user = await authenticateUser(values.username, values.password)
+      dispatch(signin(user))
       console.log('Successful login')
     } catch (error: any) {
       console.log(error.message)
