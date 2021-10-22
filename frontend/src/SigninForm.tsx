@@ -36,13 +36,15 @@ const SigninForm = (): JSX.Element => {
         validationSchema={schema}
         onSubmit={handleSubmit}
       >
-        <Form>
-          <Field name="username" type="text" placeholder="Username" />
-          <ErrorMessage name="username" />
-          <Field name="password" type="password" placeholder="Password" />
-          <ErrorMessage name="password" />
-          <button type="submit">Log in</button>
-        </Form>
+        { ({ isSubmitting }) => (
+          <Form>
+            <Field name="username" type="text" placeholder="Username" disabled={isSubmitting} />
+            <ErrorMessage name="username" />
+            <Field name="password" type="password" placeholder="Password" disabled={isSubmitting} />
+            <ErrorMessage name="password" />
+            <button type="submit" disabled={isSubmitting}>Log in</button>
+          </Form>
+        )}
       </Formik>
     </div>
   )
