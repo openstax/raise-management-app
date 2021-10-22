@@ -1,8 +1,10 @@
+import { Redirect, useLocation } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
-import { signin } from './auth-slice'
-import { authenticateUser } from './aws-cognito'
-import { useAppDispatch } from './hooks'
+import { signin, signout, selectAuthState, AuthState } from './auth-slice'
+import { authenticateUser, getExistingSession } from './aws-cognito'
+import { useAppDispatch, useAppSelector } from './hooks'
+import { useEffect } from 'react'
 
 interface SigninValues {
   username: string
@@ -11,6 +13,8 @@ interface SigninValues {
 
 const SigninForm = (): JSX.Element => {
   const dispatch = useAppDispatch()
+  const authState = useAppSelector(selectAuthState)
+  const location = useLocation< { from: { pathname: string } } | undefined >()
 
   const initialValues: SigninValues = {
     username: '',
@@ -29,8 +33,27 @@ const SigninForm = (): JSX.Element => {
       console.log('Successful login')
     } catch (error: any) {
       console.log(error.message)
+      actions.resetForm()
     }
-    actions.resetForm()
+  }
+
+  useEffect(() => {
+    if (authState === AuthState.Unknown) {
+      const checkForSession = async (): Promise<void> => {
+        const maybeUser = await getExistingSession()
+        if (maybeUser !== null) {
+          dispatch(signin(maybeUser))
+        } else {
+          dispatch(signout())
+        }
+      }
+      checkForSession().catch((error: Error) => { console.log(error.message) })
+    }
+  }, [authState])
+
+  if (authState === AuthState.SignedIn) {
+    const { from } = location.state ?? { from: { pathname: '/studies' } }
+    return (<Redirect to={from} />)
   }
 
   return (

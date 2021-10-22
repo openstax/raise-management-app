@@ -16,6 +16,14 @@ function getUserPool(): CognitoUserPool {
   })
 }
 
+function getAuthenticedUserFromSession(session: CognitoUserSession): AuthenticatedUser {
+  const idToken = session.getIdToken()
+  const username = idToken.payload[COGNITO_PAYLOAD_USERNAME_KEY] as string
+  return {
+    username: username
+  }
+}
+
 export async function signoutUser(): Promise<void> {
   const userPool = getUserPool()
 
@@ -46,13 +54,9 @@ export async function authenticateUser(username: string, password: string): Prom
     Pool: userPool
   })
 
-  return await new Promise(function (resolve, reject) {
+  return await new Promise((resolve, reject) => {
     const authSuccess = (session: CognitoUserSession): void => {
-      const idToken = session.getIdToken()
-      const username = idToken.payload[COGNITO_PAYLOAD_USERNAME_KEY] as string
-      resolve({
-        username: username
-      })
+      resolve(getAuthenticedUserFromSession(session))
     }
 
     const authFail = (err: any): void => {
@@ -66,5 +70,29 @@ export async function authenticateUser(username: string, password: string): Prom
         onFailure: authFail
       }
     )
+  })
+}
+
+export async function getExistingSession(): Promise<AuthenticatedUser | null> {
+  const userPool = getUserPool()
+
+  const currentUser = userPool.getCurrentUser()
+
+  if (currentUser == null) {
+    return null
+  }
+
+  return await new Promise((resolve, reject) => {
+    const restoreSession = (err: Error | null, session: CognitoUserSession | null): void => {
+      if (err !== null) {
+        reject(new Error(err.message))
+      }
+      if (session !== null) {
+        resolve(getAuthenticedUserFromSession(session))
+      }
+      resolve(null)
+    }
+
+    currentUser.getSession(restoreSession)
   })
 }

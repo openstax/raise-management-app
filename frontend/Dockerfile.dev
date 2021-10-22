@@ -7,6 +7,6 @@ COPY package-lock.json .
 
 RUN npm install
 
-COPY . .
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 CMD ["npm", "run", "docker:dev"]
