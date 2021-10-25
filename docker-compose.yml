@@ -30,6 +30,7 @@ services:
       - POSTGRES_PASSWORD=raise
       - POSTGRES_DB=raise_mgmt
       - POSTGRES_SERVER=postgres
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5000
   postgres:
     image: "postgres:13"
     volumes:

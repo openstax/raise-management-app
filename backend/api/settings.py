@@ -8,3 +8,10 @@ POSTGRES_DB = os.getenv("POSTGRES_DB")
 SQLALCHEMY_DATABASE_URL = (
     f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}/{POSTGRES_DB}"  # noqa: E501
 )
+
+# CORS settings
+
+# Expect this as a string of comma separated values
+CORS_ALLOWED_ORIGINS = os.getenv(
+    "CORS_ALLOWED_ORIGINS"
+)
