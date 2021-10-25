@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import SigninForm from './SigninForm'
 import Signout from './Signout'
 import PrivateRoute from './PrivateRoute'
+import StudiesListing from './StudiesListing'
 
 const App = (): JSX.Element => {
   return (
@@ -12,7 +13,7 @@ const App = (): JSX.Element => {
           <SigninForm />
         </Route>
         <PrivateRoute exact path="/studies">
-          <h1>Studies</h1>
+          <StudiesListing />
         </PrivateRoute>
       </Switch>
     </Router>
