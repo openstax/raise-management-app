@@ -1,9 +1,9 @@
 import { Redirect, useLocation } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
-import { signin, signout, selectAuthState, AuthState } from './auth-slice'
-import { authenticateUser, getExistingSession } from './aws-cognito'
-import { useAppDispatch, useAppSelector } from './hooks'
+import { signin, signout, selectAuthState, AuthState } from '../lib/auth-slice'
+import { authenticateUser, getExistingSession } from '../lib/aws-cognito'
+import { useAppDispatch, useAppSelector } from '../lib/hooks'
 import { useEffect } from 'react'
 
 interface SigninValues {

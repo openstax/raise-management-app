@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Study } from './api'
-import { useStudiesApi } from './api-config'
+import { Study } from '../api'
+import { useStudiesApi } from '../lib/api-config'
 
 const StudiesListing = (): JSX.Element => {
   const [studies, setStudies] = useState<Study[]>()

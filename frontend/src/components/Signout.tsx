@@ -1,6 +1,6 @@
-import { signout } from './auth-slice'
-import { signoutUser } from './aws-cognito'
-import { useAppDispatch } from './hooks'
+import { signout } from '../lib/auth-slice'
+import { signoutUser } from '../lib/aws-cognito'
+import { useAppDispatch } from '../lib/hooks'
 
 const Signout = (): JSX.Element => {
   const dispatch = useAppDispatch()
