@@ -7,9 +7,11 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "build": "tsc && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "gen-client-api": "openapi-generator-cli generate --additional-properties=typescriptThreePlus=true -i http://localhost:8000/openapi.json -g typescript-fetch -o src/api"
   },
   "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.4.13",
     "@reduxjs/toolkit": "^1.6.2",
     "amazon-cognito-identity-js": "^5.2.0",
     "formik": "^2.2.9",
