@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  api:
+    environment:
+      - COGNITO_AWS_REGION=awsregion
+      - COGNITO_USER_POOL_ID=userpoolid
+      - COGNITO_CLIENT_ID=clientid

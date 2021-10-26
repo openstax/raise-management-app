@@ -1,4 +1,4 @@
-from typing import Union, Optional
+from typing import Union, Optional, List
 from pydantic import BaseModel
 from enum import Enum
 
@@ -39,3 +39,9 @@ class Study(StudyBase, StudyStatus):
 
     class Config:
         orm_mode = True
+
+
+class UserData(BaseModel):
+    """User data obtained from auth token"""
+    username: str
+    groups: List[str]
