@@ -7,12 +7,16 @@ const StudiesListing = (): JSX.Element => {
   const studiesApi = useStudiesApi()
 
   const fetchStudies = async (): Promise<void> => {
-    const studies = await studiesApi.listStudiesStudiesGet()
-    setStudies(studies)
+    try {
+      const studies = await studiesApi.listStudiesStudiesGet()
+      setStudies(studies)
+    } catch (error: any) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {
-    fetchStudies().catch((error: Error) => { console.log(error.message) })
+    fetchStudies().catch((error: any) => { console.log(error) })
   }, [])
 
   return (
