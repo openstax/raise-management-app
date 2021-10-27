@@ -2,7 +2,7 @@ import { Redirect, useLocation } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
 import { signin, signout, selectAuthState, AuthState } from '../lib/auth-slice'
-import { authenticateUser, getExistingSession } from '../lib/aws-cognito'
+import { ENV } from '../lib/env'
 import { useAppDispatch, useAppSelector } from '../lib/hooks'
 import { useEffect } from 'react'
 
@@ -16,6 +16,8 @@ const SigninForm = (): JSX.Element => {
   const authState = useAppSelector(selectAuthState)
   const location = useLocation< { from: { pathname: string } } | undefined >()
 
+  const authenticator = ENV.AUTHENTICATOR
+
   const initialValues: SigninValues = {
     username: '',
     password: ''
@@ -28,7 +30,7 @@ const SigninForm = (): JSX.Element => {
 
   const handleSubmit = async (values: SigninValues, actions: FormikHelpers<SigninValues>): Promise<void> => {
     try {
-      const user = await authenticateUser(values.username, values.password)
+      const user = await authenticator.authenticateUser(values.username, values.password)
       dispatch(signin({ username: user.username }))
       console.log('Successful login')
     } catch (error: any) {
@@ -40,7 +42,7 @@ const SigninForm = (): JSX.Element => {
   useEffect(() => {
     if (authState === AuthState.Unknown) {
       const checkForSession = async (): Promise<void> => {
-        const maybeUser = await getExistingSession()
+        const maybeUser = await authenticator.getExistingSession()
         if (maybeUser !== null) {
           dispatch(signin({ username: maybeUser.username }))
         } else {

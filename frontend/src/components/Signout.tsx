@@ -1,13 +1,15 @@
 import { signout } from '../lib/auth-slice'
-import { signoutUser } from '../lib/aws-cognito'
+import { ENV } from '../lib/env'
 import { useAppDispatch } from '../lib/hooks'
 
 const Signout = (): JSX.Element => {
   const dispatch = useAppDispatch()
 
+  const authenticator = ENV.AUTHENTICATOR
+
   const handleSignout = async (event: React.MouseEvent<HTMLAnchorElement>): Promise<void> => {
     event.preventDefault()
-    await signoutUser()
+    await authenticator.signoutUser()
     dispatch(signout())
   }
 

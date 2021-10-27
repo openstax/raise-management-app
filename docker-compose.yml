@@ -5,8 +5,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile${FE_DOCKERFILE_EXT:-}
       args:
-        - VITE_COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
-        - VITE_COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID
+        - VITE_COGNITO_USER_POOL_ID=${COGNITO_USER_POOL_ID:-}
+        - VITE_COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID:-}
+        - VITE_FAKE_AUTH_MODE=${FAKE_AUTH_MODE:-}
     volumes:
       - ./frontend:/code
       - /code/node_modules
@@ -38,6 +39,7 @@ services:
       - COGNITO_AWS_REGION
       - COGNITO_USER_POOL_ID
       - COGNITO_CLIENT_ID
+      - FAKE_AUTH_MODE
   postgres:
     image: "postgres:13"
     volumes:

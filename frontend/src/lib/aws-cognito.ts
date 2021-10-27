@@ -1,14 +1,10 @@
 import {
   CognitoUserPool, CognitoUser, CognitoUserSession, AuthenticationDetails
 } from 'amazon-cognito-identity-js'
+import { AuthenticatedUser } from './auth'
 import { ENV } from './env'
 
 const COGNITO_PAYLOAD_USERNAME_KEY = 'cognito:username'
-
-interface AuthenticatedUser {
-  username: string
-  idToken: string
-}
 
 function getUserPool(): CognitoUserPool {
   return new CognitoUserPool({

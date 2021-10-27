@@ -3,12 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from .auth import CognitoJWTBearer
 from .endpoints import studies_router
 from .settings import CORS_ALLOWED_ORIGINS, COGNITO_AWS_REGION, \
-    COGNITO_USER_POOL_ID, COGNITO_CLIENT_ID
+    COGNITO_USER_POOL_ID, COGNITO_CLIENT_ID, FAKE_AUTH_MODE
 
+# Enable token authentication, but skip verification if configured to do so
 cognito_auth = CognitoJWTBearer(
     aws_region=COGNITO_AWS_REGION,
     user_pool_id=COGNITO_USER_POOL_ID,
-    client_id=COGNITO_CLIENT_ID
+    client_id=COGNITO_CLIENT_ID,
+    skip_verification=FAKE_AUTH_MODE
 )
 
 app = FastAPI(

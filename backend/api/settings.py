@@ -16,8 +16,8 @@ CORS_ALLOWED_ORIGINS = os.getenv(
     "CORS_ALLOWED_ORIGINS"
 )
 
-# Cognito settings
-
+# Cognito / Auth settings
 COGNITO_AWS_REGION = os.getenv("COGNITO_AWS_REGION")
 COGNITO_USER_POOL_ID = os.getenv("COGNITO_USER_POOL_ID")
 COGNITO_CLIENT_ID = os.getenv("COGNITO_CLIENT_ID")
+FAKE_AUTH_MODE = os.getenv("FAKE_AUTH_MODE") == "1"
