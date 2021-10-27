@@ -50,11 +50,9 @@ class CognitoJWTBearer(HTTPBearer):
             )
         kid = unverified_headers["kid"]
 
-        # We cache the list of public keys, so only request if needed
-        if not self.cognito_keys:
-            self.cognito_keys = await self.get_cognito_keys()
+        cognito_keys = await self.get_cognito_keys()
 
-        maybeKey = list(filter(lambda k: k["kid"] == kid, self.cognito_keys))
+        maybeKey = list(filter(lambda k: k["kid"] == kid, cognito_keys))
         if not maybeKey:
             raise HTTPException(
                 status_code=403,
@@ -119,6 +117,10 @@ class CognitoJWTBearer(HTTPBearer):
         return verified_claims
 
     async def get_cognito_keys(self) -> List[dict]:
+        """Get / cache public keys"""
+        if self.cognito_keys:
+            return self.cognito_keys
+
         keys_url = COGNITO_KEYS_URL_TEMPLATE.format(
             self.aws_region,
             self.user_pool_id
@@ -126,4 +128,6 @@ class CognitoJWTBearer(HTTPBearer):
         async with aiohttp.ClientSession() as session:
             async with session.get(keys_url) as response:
                 data = await response.json()
-        return data.get("keys", [])
+        self.cognito_keys = data.get("keys", [])
+
+        return self.cognito_keys
