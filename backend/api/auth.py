@@ -82,7 +82,7 @@ class CognitoJWTBearer(HTTPBearer):
                 status_code=403,
                 detail=str(error)
             )
-        kid = unverified_headers["kid"]
+        kid = unverified_headers.get("kid")
 
         cognito_keys = await self.get_cognito_keys()
 
