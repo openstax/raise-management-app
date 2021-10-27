@@ -1,5 +1,8 @@
 FROM node:14 as builder
 
+ARG VITE_COGNITO_USER_POOL_ID
+ARG VITE_COGNITO_CLIENT_ID
+
 WORKDIR /code
 
 COPY package.json .
