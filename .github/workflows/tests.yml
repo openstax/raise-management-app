@@ -16,3 +16,20 @@ jobs:
       - name: Run tests
         run: |
           ./backend/scripts/test.sh
+  frontend:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Setup
+        working-directory: ./frontend
+        run: |
+          npm install
+          npx playwright install chromium
+      - name: Run tests
+        working-directory: ./frontend
+        run: |
+          ./scripts/test.sh
