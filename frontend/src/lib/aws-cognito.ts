@@ -7,6 +7,7 @@ const COGNITO_PAYLOAD_USERNAME_KEY = 'cognito:username'
 
 interface AuthenticatedUser {
   username: string
+  idToken: string
 }
 
 function getUserPool(): CognitoUserPool {
@@ -20,7 +21,8 @@ function getAuthenticedUserFromSession(session: CognitoUserSession): Authenticat
   const idToken = session.getIdToken()
   const username = idToken.payload[COGNITO_PAYLOAD_USERNAME_KEY] as string
   return {
-    username: username
+    username: username,
+    idToken: idToken.getJwtToken()
   }
 }
 

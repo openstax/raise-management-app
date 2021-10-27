@@ -29,7 +29,7 @@ const SigninForm = (): JSX.Element => {
   const handleSubmit = async (values: SigninValues, actions: FormikHelpers<SigninValues>): Promise<void> => {
     try {
       const user = await authenticateUser(values.username, values.password)
-      dispatch(signin(user))
+      dispatch(signin({ username: user.username }))
       console.log('Successful login')
     } catch (error: any) {
       console.log(error.message)
@@ -42,7 +42,7 @@ const SigninForm = (): JSX.Element => {
       const checkForSession = async (): Promise<void> => {
         const maybeUser = await getExistingSession()
         if (maybeUser !== null) {
-          dispatch(signin(maybeUser))
+          dispatch(signin({ username: maybeUser.username }))
         } else {
           dispatch(signout())
         }
