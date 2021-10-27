@@ -68,9 +68,9 @@ const SigninForm = (): JSX.Element => {
       >
         { ({ isSubmitting }) => (
           <Form>
-            <Field name="username" type="text" placeholder="Username" disabled={isSubmitting} />
+            <Field id="username" name="username" type="text" placeholder="Username" disabled={isSubmitting} />
             <ErrorMessage name="username" />
-            <Field name="password" type="password" placeholder="Password" disabled={isSubmitting} />
+            <Field id="password" name="password" type="password" placeholder="Password" disabled={isSubmitting} />
             <ErrorMessage name="password" />
             <button type="submit" disabled={isSubmitting}>Log in</button>
           </Form>
