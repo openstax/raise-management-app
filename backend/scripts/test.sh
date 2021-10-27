@@ -5,7 +5,9 @@ set -e
 # Print commands to help with debugging
 set -x
 
-export COMPOSE_FILE=docker-compose.yml:docker-compose.ci.backend.yml
+export COGNITO_AWS_REGION=awsregion
+export COGNITO_USER_POOL_ID=userpoolid
+export COGNITO_CLIENT_ID=clientid
 INSTALL_DEV=true docker-compose build api
 docker-compose down -v --remove-orphans
 docker-compose up -d api
