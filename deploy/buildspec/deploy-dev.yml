@@ -22,6 +22,9 @@ phases:
       - yq e -i '.stringData.password=strenv(POSTGRES_PASSWORD)' $K8S_DIR/api/secret.yaml
       - yq e -i '.spec.template.spec.containers[0].image=strenv(BACKEND_IMAGE_TAG)' $K8S_DIR/api/deployment.yaml
       - yq e -i '.spec.template.spec.containers[0].env[] |= select(.name=="POSTGRES_SERVER").value=strenv(POSTGRES_SERVER)' $K8S_DIR/api/deployment.yaml
+      - yq e -i '.spec.template.spec.containers[0].env[] |= select(.name=="COGNITO_AWS_REGION").value=strenv(COGNITO_AWS_REGION)' $K8S_DIR/api/deployment.yaml
+      - yq e -i '.spec.template.spec.containers[0].env[] |= select(.name=="COGNITO_USER_POOL_ID").value=strenv(COGNITO_USER_POOL_ID)' $K8S_DIR/api/deployment.yaml
+      - yq e -i '.spec.template.spec.containers[0].env[] |= select(.name=="COGNITO_CLIENT_ID").value=strenv(COGNITO_CLIENT_ID)' $K8S_DIR/api/deployment.yaml
       - yq e -i '.spec.routes[].match="Host(`rma-dev.raise.openstax.org`) && PathPrefix(`/api`)"' $K8S_DIR/api/ingressroute.yaml
   build:
     commands:
