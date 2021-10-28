@@ -32,6 +32,12 @@ spec:
               value: rma
             - name: POSTGRES_SERVER
               value: REPLACED_IN_PIPELINE
+            - name: COGNITO_AWS_REGION
+              value: REPLACED_IN_PIPELINE
+            - name: COGNITO_USER_POOL_ID
+              value: REPLACED_IN_PIPELINE
+            - name: COGNITO_CLIENT_ID
+              value: REPLACED_IN_PIPELINE
           command:
             - uvicorn
           args:

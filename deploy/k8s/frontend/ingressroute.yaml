@@ -1,7 +1,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: rma-api-tls
+  name: rma-frontend-tls
 spec:
   entryPoints:
     - websecure
@@ -10,17 +10,15 @@ spec:
   routes:
     - match: REPLACED_IN_PIPELINE
       kind: Rule
-      middlewares:
-        - name: rma-api-strip-prefix
       services:
-        - name: rma-api
+        - name: rma-frontend
           port: 80
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: rma-api
+  name: rma-frontend
 spec:
   entryPoints:
     - web
@@ -30,5 +28,5 @@ spec:
       middlewares:
         - name: rma-http-redirect
       services:
-        - name: rma-api
+        - name: rma-frontend
           port: 80

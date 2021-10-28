@@ -16,13 +16,19 @@ phases:
   pre_build:
     commands:
       - aws eks update-kubeconfig --name $K8S_CLUSTER_NAME
-      - export BACKEND_IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR_build_output/backend-image-tag.txt)
+      - export BACKEND_IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR_backend_build_output/backend-image-tag.txt)
+      - export FRONTEND_IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR_frontend_build_output/frontend-image-tag.txt)
       - export K8S_DIR=deploy/k8s
       - yq e -i '.stringData.username=strenv(POSTGRES_USER)' $K8S_DIR/api/secret.yaml
       - yq e -i '.stringData.password=strenv(POSTGRES_PASSWORD)' $K8S_DIR/api/secret.yaml
       - yq e -i '.spec.template.spec.containers[0].image=strenv(BACKEND_IMAGE_TAG)' $K8S_DIR/api/deployment.yaml
       - yq e -i '.spec.template.spec.containers[0].env[] |= select(.name=="POSTGRES_SERVER").value=strenv(POSTGRES_SERVER)' $K8S_DIR/api/deployment.yaml
+      - yq e -i '.spec.template.spec.containers[0].env[] |= select(.name=="COGNITO_AWS_REGION").value=strenv(COGNITO_AWS_REGION)' $K8S_DIR/api/deployment.yaml
+      - yq e -i '.spec.template.spec.containers[0].env[] |= select(.name=="COGNITO_USER_POOL_ID").value=strenv(COGNITO_USER_POOL_ID)' $K8S_DIR/api/deployment.yaml
+      - yq e -i '.spec.template.spec.containers[0].env[] |= select(.name=="COGNITO_CLIENT_ID").value=strenv(COGNITO_CLIENT_ID)' $K8S_DIR/api/deployment.yaml
       - yq e -i '.spec.routes[].match="Host(`rma-dev.raise.openstax.org`) && PathPrefix(`/api`)"' $K8S_DIR/api/ingressroute.yaml
+      - yq e -i '.spec.template.spec.containers[0].image=strenv(FRONTEND_IMAGE_TAG)' $K8S_DIR/frontend/deployment.yaml
+      - yq e -i '.spec.routes[].match="Host(`rma-dev.raise.openstax.org`)"' $K8S_DIR/frontend/ingressroute.yaml
   build:
     commands:
       - kubectl apply -R -f $K8S_DIR
