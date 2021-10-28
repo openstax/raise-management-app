@@ -7,7 +7,7 @@ COPY package-lock.json .
 
 RUN npm install
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY . .
 
 ARG VITE_COGNITO_USER_POOL_ID
 ARG VITE_COGNITO_CLIENT_ID
