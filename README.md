@@ -100,7 +100,6 @@ Users can be added / removed from groups as well via CLI:
 ```bash
 $ aws cognito-idp admin-add-user-to-group --user-pool-id $USER_POOL_ID --username $NEW_USER --group-name <group>
 $ aws cognito-idp admin-remove-user-from-group --user-pool-id $USER_POOL_ID --username $NEW_USER --group-name <group>
-$
 ```
 
 ### Running tests
