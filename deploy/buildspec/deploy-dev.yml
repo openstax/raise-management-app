@@ -16,7 +16,7 @@ phases:
   pre_build:
     commands:
       - aws eks update-kubeconfig --name $K8S_CLUSTER_NAME
-      - export BACKEND_IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR_build_output/backend-image-tag.txt)
+      - export BACKEND_IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR_backend_build_output/backend-image-tag.txt)
       - export K8S_DIR=deploy/k8s
       - yq e -i '.stringData.username=strenv(POSTGRES_USER)' $K8S_DIR/api/secret.yaml
       - yq e -i '.stringData.password=strenv(POSTGRES_PASSWORD)' $K8S_DIR/api/secret.yaml
