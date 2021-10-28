@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rma-frontend
+  labels:
+    app: rma-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rma-frontend
+  template:
+    metadata:
+      labels:
+        app: rma-frontend
+    spec:
+      containers:
+        - name: rma-frontend
+          image: REPLACED_IN_PIPELINE
+          ports:
+            - containerPort: 80
