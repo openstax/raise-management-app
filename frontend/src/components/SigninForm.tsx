@@ -39,6 +39,7 @@ const SigninForm = (): JSX.Element => {
 
   const handleSubmit = async (values: SigninValues, actions: FormikHelpers<SigninValues>): Promise<void> => {
     try {
+      setLoginError('')
       const user = await authenticator.authenticateUser(values.username, values.password)
       dispatch(signin({ username: user.username }))
     } catch (error: any) {
