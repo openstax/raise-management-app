@@ -7,14 +7,13 @@ const Signout = (): JSX.Element => {
 
   const authenticator = ENV.AUTHENTICATOR
 
-  const handleSignout = async (event: React.MouseEvent<HTMLAnchorElement>): Promise<void> => {
-    event.preventDefault()
+  const handleSignout = async (event: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
     await authenticator.signoutUser()
     dispatch(signout())
   }
 
   return (
-    <a href="#" onClick={handleSignout}>Signout</a>
+    <button className="btn btn-outline-warning" type="button" onClick={handleSignout}>Signout</button>
   )
 }
 

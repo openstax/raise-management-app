@@ -7,7 +7,25 @@
 
 // Additional styles
 @import "bootstrap/scss/helpers";
-@import "bootstrap/scss/utilities";
-@import "bootstrap/scss/utilities/api";
 @import "bootstrap/scss/buttons";
 @import "bootstrap/scss/forms";
+
+// Utilities
+@import "bootstrap/scss/utilities";
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "width": map-merge(
+      map-get($utilities, "width"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "width"), "values"),
+          (80: 80%),
+        ),
+      ),
+    ),
+  )
+);
+
+@import "bootstrap/scss/utilities/api";
