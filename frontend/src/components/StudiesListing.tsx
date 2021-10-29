@@ -18,19 +18,21 @@ const tableColumns: Array<TableColumn<Study>> = [
 
 const StudiesListing = (): JSX.Element => {
   const [studies, setStudies] = useState<Study[]>([])
+  const [fetchError, setFetchError] = useState<string>('')
   const studiesApi = useStudiesApi()
 
   const fetchStudies = async (): Promise<void> => {
     try {
+      setFetchError('')
       const studies = await studiesApi.listStudiesStudiesGet()
       setStudies(studies)
     } catch (error: any) {
-      console.log(error)
+      setFetchError(error.toString())
     }
   }
 
   useEffect(() => {
-    fetchStudies().catch((error: any) => { console.log(error) })
+    fetchStudies().catch((error: any) => { setFetchError(error.toString()) })
   }, [])
 
   return (
@@ -46,6 +48,7 @@ const StudiesListing = (): JSX.Element => {
           </button>
         </div>
       </div>
+      <div className="text-danger text-center fw-bold">{fetchError}</div>
       <DataTable
         data={studies}
         columns={tableColumns}
