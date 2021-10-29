@@ -4,7 +4,15 @@ import * as Yup from 'yup'
 import { signin, signout, selectAuthState, AuthState } from '../lib/auth-slice'
 import { ENV } from '../lib/env'
 import { useAppDispatch, useAppSelector } from '../lib/hooks'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
+
+const SigninBox = styled.div`
+  margin-top: 100px;
+  max-width: 500px;
+  padding: 40px;
+  border-radius: 1rem;
+`
 
 interface SigninValues {
   username: string
@@ -15,6 +23,7 @@ const SigninForm = (): JSX.Element => {
   const dispatch = useAppDispatch()
   const authState = useAppSelector(selectAuthState)
   const location = useLocation< { from: { pathname: string } } | undefined >()
+  const [loginError, setLoginError] = useState<string>('')
 
   const authenticator = ENV.AUTHENTICATOR
 
@@ -32,9 +41,8 @@ const SigninForm = (): JSX.Element => {
     try {
       const user = await authenticator.authenticateUser(values.username, values.password)
       dispatch(signin({ username: user.username }))
-      console.log('Successful login')
     } catch (error: any) {
-      console.log(error.message)
+      setLoginError(error.message)
       actions.resetForm()
     }
   }
@@ -49,7 +57,7 @@ const SigninForm = (): JSX.Element => {
           dispatch(signout())
         }
       }
-      checkForSession().catch((error: Error) => { console.log(error.message) })
+      checkForSession().catch((error: Error) => { setLoginError(error.message) })
     }
   }, [authState])
 
@@ -59,8 +67,8 @@ const SigninForm = (): JSX.Element => {
   }
 
   return (
-    <div>
-      <h1>Sign in</h1>
+    <SigninBox className="d-flex flex-column align-items-center mx-auto border border-2 border-info">
+      <h1 className="text-secondary mb-3">Sign in</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={schema}
@@ -68,15 +76,22 @@ const SigninForm = (): JSX.Element => {
       >
         { ({ isSubmitting }) => (
           <Form>
-            <Field id="username" name="username" type="text" placeholder="Username" disabled={isSubmitting} />
-            <ErrorMessage name="username" />
-            <Field id="password" name="password" type="password" placeholder="Password" disabled={isSubmitting} />
-            <ErrorMessage name="password" />
-            <button type="submit" disabled={isSubmitting}>Log in</button>
+            <div className="mb-3">
+              <Field className="form-control" id="username" name="username" type="text" placeholder="Username" disabled={isSubmitting} />
+              <ErrorMessage className="text-danger" component="div" name="username" />
+            </div>
+            <div className="mb-3">
+              <Field className="form-control" id="password" name="password" type="password" placeholder="Password" disabled={isSubmitting} />
+              <ErrorMessage className="text-danger" component="div" name="password" />
+            </div>
+            <div className="mb-3">
+              <button className="btn btn-info d-block mx-auto w-100" type="submit" disabled={isSubmitting}>Submit</button>
+            </div>
           </Form>
         )}
       </Formik>
-    </div>
+      <div className="text-danger">{loginError}</div>
+    </SigninBox>
   )
 }
 
