@@ -3,6 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 from . import models
 from . import database
+from . import auth
 
 studies_router = APIRouter()
 
@@ -10,8 +11,15 @@ studies_router = APIRouter()
 @studies_router.post("/", status_code=201, response_model=models.Study)
 async def create_study(
     study: models.StudyCreate,
-    db: Session = Depends(database.get_db)
+    db: Session = Depends(database.get_db),
+    user: models.UserData = Depends(auth.get_userdata)
 ):
+    # Only expect / allow users with researcher role to create studies
+    if (not user.is_researcher):
+        raise HTTPException(
+            status_code=403, detail="Must be researcher to create study"
+        )
+
     # Set initial study status
     new_study = models.Study(
         **study.dict(),

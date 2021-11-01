@@ -8,7 +8,33 @@ def study_generator(name: str) -> dict:
     return
 
 
-def test_post_studies(client: TestClient, admin_token_header: Dict):
+def test_post_studies_researcher(
+    client: TestClient, researcher_token_header: Dict
+):
+    data = {
+        "title": "Test study title",
+        "description": "Test study description",
+        "configuration": {
+            "url": "http://qualtrics",
+            "secret": "qualtricssecret"
+        }
+    }
+    response = client.post(
+        "/studies/", headers=researcher_token_header, json=data
+    )
+    assert response.status_code == 201
+    content = response.json()
+    assert "id" in content
+    assert "status" in content
+    assert content["status"] == "SUBMITTED"
+    del content["id"]
+    del content["status"]
+    assert content == data
+
+
+def test_post_studies_admin(
+    client: TestClient, admin_token_header: Dict
+):
     data = {
         "title": "Test study title",
         "description": "Test study description",
@@ -18,14 +44,7 @@ def test_post_studies(client: TestClient, admin_token_header: Dict):
         }
     }
     response = client.post("/studies/", headers=admin_token_header, json=data)
-    assert response.status_code == 201
-    content = response.json()
-    assert "id" in content
-    assert "status" in content
-    assert content["status"] == "SUBMITTED"
-    del content["id"]
-    del content["status"]
-    assert content == data
+    assert response.status_code == 403
 
 
 def test_get_studies(

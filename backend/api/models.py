@@ -45,3 +45,5 @@ class UserData(BaseModel):
     """User data obtained from auth token"""
     username: str
     groups: List[str]
+    is_admin: bool
+    is_researcher: bool

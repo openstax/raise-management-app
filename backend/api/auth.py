@@ -11,6 +11,8 @@ COGNITO_KEYS_URL_TEMPLATE = \
 COGNITO_ISS_TEMPLATE = "https://cognito-idp.{}.amazonaws.com/{}"
 COGNITO_USERNAME_CLAIM = "cognito:username"
 COGNITO_GROUPS_CLAIM = "cognito:groups"
+COGNITO_ADMIN_GROUP = "admin"
+COGNITO_RESEARCHER_GROUP = "researcher"
 
 
 def get_userdata(request: Request) -> UserData:
@@ -67,10 +69,12 @@ class CognitoJWTBearer(HTTPBearer):
                 detail="Token missing required claims"
             )
 
-        request.state.userdata = {
-            "username": username,
-            "groups": user_groups
-        }
+        request.state.userdata = UserData(
+            username=username,
+            groups=user_groups,
+            is_admin=COGNITO_ADMIN_GROUP in user_groups,
+            is_researcher=COGNITO_RESEARCHER_GROUP in user_groups
+        )
 
         return credentials
 
