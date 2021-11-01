@@ -43,7 +43,10 @@ const SigninForm = (): JSX.Element => {
     try {
       setSigninError('')
       const user = await authenticator.authenticateUser(values.username, values.password)
-      dispatch(signin({ username: user.username }))
+      dispatch(signin({
+        username: user.username,
+        usergroups: user.usergroups
+      }))
     } catch (error: any) {
       setSigninError(error.message)
       actions.resetForm()
@@ -55,7 +58,10 @@ const SigninForm = (): JSX.Element => {
       const checkForSession = async (): Promise<void> => {
         const maybeUser = await authenticator.getExistingSession()
         if (maybeUser !== null) {
-          dispatch(signin({ username: maybeUser.username }))
+          dispatch(signin({
+            username: maybeUser.username,
+            usergroups: maybeUser.usergroups
+          }))
         } else {
           dispatch(signout())
         }
