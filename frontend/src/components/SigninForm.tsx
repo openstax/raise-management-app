@@ -7,7 +7,9 @@ import { useAppDispatch, useAppSelector } from '../lib/hooks'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-const SigninBox = styled.div`
+const SigninBox = styled.div.attrs({
+  className: 'd-flex flex-column align-items-center mx-auto border border-2 border-info'
+})`
   margin-top: 100px;
   max-width: 500px;
   padding: 40px;
@@ -68,7 +70,7 @@ const SigninForm = (): JSX.Element => {
   }
 
   return (
-    <SigninBox className="d-flex flex-column align-items-center mx-auto border border-2 border-info">
+    <SigninBox>
       <h1 className="text-secondary mb-3">Sign in</h1>
       <Formik
         initialValues={initialValues}
