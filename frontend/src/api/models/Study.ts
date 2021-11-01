@@ -60,6 +60,12 @@ export interface Study {
      * @memberof Study
      */
     id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Study
+     */
+    owner: string;
 }
 
 export function StudyFromJSON(json: any): Study {
@@ -77,6 +83,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'description': json['description'],
         '_configuration': StudyQualtricsConfigFromJSON(json['configuration']),
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'owner': json['owner'],
     };
 }
 
@@ -94,6 +101,7 @@ export function StudyToJSON(value?: Study | null): any {
         'description': value.description,
         'configuration': StudyQualtricsConfigToJSON(value._configuration),
         'id': value.id,
+        'owner': value.owner,
     };
 }
 
