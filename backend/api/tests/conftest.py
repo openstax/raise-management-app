@@ -66,28 +66,32 @@ def mock_cognito_keys(hmac_key):
 
 
 @pytest.fixture
-def admin_token_header(hmac_key, hmac_headers, token_issuer) -> Dict:
-    payload = {
-        "aud": COGNITO_CLIENT_ID,
-        "iss": token_issuer,
-        "token_use": "id",
-        COGNITO_USERNAME_CLAIM: "adminuser",
-        COGNITO_GROUPS_CLAIM: [COGNITO_ADMIN_GROUP],
-        "exp": time.time() + 60
-    }
-    token = jwt.encode(payload, hmac_key, headers=hmac_headers)
-    return {"Authorization": f"Bearer {token}"}
+def admin_header_factory(hmac_key, hmac_headers, token_issuer) -> Dict:
+    def _header_generator(username):
+        payload = {
+            "aud": COGNITO_CLIENT_ID,
+            "iss": token_issuer,
+            "token_use": "id",
+            COGNITO_USERNAME_CLAIM: username,
+            COGNITO_GROUPS_CLAIM: [COGNITO_ADMIN_GROUP],
+            "exp": time.time() + 60
+        }
+        token = jwt.encode(payload, hmac_key, headers=hmac_headers)
+        return {"Authorization": f"Bearer {token}"}
+    return _header_generator
 
 
 @pytest.fixture
-def researcher_token_header(hmac_key, hmac_headers, token_issuer) -> Dict:
-    payload = {
-        "aud": COGNITO_CLIENT_ID,
-        "iss": token_issuer,
-        "token_use": "id",
-        COGNITO_USERNAME_CLAIM: "researchuser",
-        COGNITO_GROUPS_CLAIM: [COGNITO_RESEARCHER_GROUP],
-        "exp": time.time() + 60
-    }
-    token = jwt.encode(payload, hmac_key, headers=hmac_headers)
-    return {"Authorization": f"Bearer {token}"}
+def researcher_header_factory(hmac_key, hmac_headers, token_issuer) -> Dict:
+    def _header_generator(username):
+        payload = {
+            "aud": COGNITO_CLIENT_ID,
+            "iss": token_issuer,
+            "token_use": "id",
+            COGNITO_USERNAME_CLAIM: username,
+            COGNITO_GROUPS_CLAIM: [COGNITO_RESEARCHER_GROUP],
+            "exp": time.time() + 60
+        }
+        token = jwt.encode(payload, hmac_key, headers=hmac_headers)
+        return {"Authorization": f"Bearer {token}"}
+    return _header_generator

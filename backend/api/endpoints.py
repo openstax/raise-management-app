@@ -23,7 +23,8 @@ async def create_study(
     # Set initial study status
     new_study = models.Study(
         **study.dict(),
-        status=models.StudyStatusValues.submitted
+        status=models.StudyStatusValues.submitted,
+        owner=user.username
     )
 
     return database.create_study(db, new_study)

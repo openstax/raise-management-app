@@ -9,6 +9,7 @@ def test_create_study(db: Session):
         title="Test study title",
         description="Test study description",
         status=StudyStatusValues.submitted,
+        owner="someuser",
         configuration={
             "url": "http://qualtrics",
             "secret": "qualtricssecret"

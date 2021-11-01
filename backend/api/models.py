@@ -36,6 +36,7 @@ class StudyStatus(BaseModel):
 class Study(StudyBase, StudyStatus):
     """Study response model"""
     id: Optional[int] = None
+    owner: str
 
     class Config:
         orm_mode = True
