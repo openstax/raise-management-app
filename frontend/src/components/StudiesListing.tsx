@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { Study } from '../api'
 import { useStudiesApi } from '../lib/api-config'
 import { Refresh, Plus } from './Icons'
+import { selectIsResearcher } from '../lib/auth-slice'
+import { useAppSelector } from '../lib/hooks'
 
 const tableColumns: Array<TableColumn<Study>> = [
   {
@@ -21,6 +23,7 @@ const StudiesListing = (): JSX.Element => {
   const [fetchError, setFetchError] = useState<string>('')
   const [isInitialized, setIsInitialized] = useState<boolean>(false)
   const studiesApi = useStudiesApi()
+  const userIsResearcher = useAppSelector(selectIsResearcher)
 
   const fetchStudies = async (): Promise<void> => {
     try {
@@ -46,14 +49,21 @@ const StudiesListing = (): JSX.Element => {
     )
   }
 
+  let maybeNewButton = null
+  if (userIsResearcher) {
+    maybeNewButton = (
+      <button className="btn btn-outline-success rounded-circle me-2" type="button">
+        <Plus />
+      </button>
+    )
+  }
+
   return (
     <div className="w-80 mx-auto">
       <div className="d-flex align-items-center justify-content-between">
         <h2 className="text-secondary">Studies</h2>
         <div>
-          <button className="btn btn-outline-success rounded-circle me-2" type="button">
-            <Plus />
-          </button>
+          {maybeNewButton}
           <button className="btn btn-outline-secondary rounded-circle" type="button" onClick={fetchStudies}>
             <Refresh />
           </button>
