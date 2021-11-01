@@ -25,7 +25,7 @@ const SigninForm = (): JSX.Element => {
   const dispatch = useAppDispatch()
   const authState = useAppSelector(selectAuthState)
   const location = useLocation< { from: { pathname: string } } | undefined >()
-  const [loginError, setLoginError] = useState<string>('')
+  const [signinError, setSigninError] = useState<string>('')
 
   const authenticator = ENV.AUTHENTICATOR
 
@@ -41,11 +41,11 @@ const SigninForm = (): JSX.Element => {
 
   const handleSubmit = async (values: SigninValues, actions: FormikHelpers<SigninValues>): Promise<void> => {
     try {
-      setLoginError('')
+      setSigninError('')
       const user = await authenticator.authenticateUser(values.username, values.password)
       dispatch(signin({ username: user.username }))
     } catch (error: any) {
-      setLoginError(error.message)
+      setSigninError(error.message)
       actions.resetForm()
     }
   }
@@ -60,13 +60,20 @@ const SigninForm = (): JSX.Element => {
           dispatch(signout())
         }
       }
-      checkForSession().catch((error: Error) => { setLoginError(error.message) })
+      checkForSession().catch((error: Error) => {
+        setSigninError(error.message)
+        dispatch(signout())
+      })
     }
   }, [authState])
 
   if (authState === AuthState.SignedIn) {
     const { from } = location.state ?? { from: { pathname: '/studies' } }
     return (<Redirect to={from} />)
+  }
+
+  if (authState === AuthState.Unknown) {
+    return (<></>)
   }
 
   return (
@@ -93,7 +100,7 @@ const SigninForm = (): JSX.Element => {
           </Form>
         )}
       </Formik>
-      <div className="text-danger">{loginError}</div>
+      <div className="text-danger">{signinError}</div>
     </SigninBox>
   )
 }

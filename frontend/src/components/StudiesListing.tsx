@@ -19,6 +19,7 @@ const tableColumns: Array<TableColumn<Study>> = [
 const StudiesListing = (): JSX.Element => {
   const [studies, setStudies] = useState<Study[]>([])
   const [fetchError, setFetchError] = useState<string>('')
+  const [isInitialized, setIsInitialized] = useState<boolean>(false)
   const studiesApi = useStudiesApi()
 
   const fetchStudies = async (): Promise<void> => {
@@ -32,8 +33,18 @@ const StudiesListing = (): JSX.Element => {
   }
 
   useEffect(() => {
-    fetchStudies().catch((error: any) => { setFetchError(error.toString()) })
+    fetchStudies().catch(
+      (error: any) => { setFetchError(error.toString()) }
+    ).finally(
+      () => { setIsInitialized(true) }
+    )
   }, [])
+
+  if (!isInitialized) {
+    return (
+      <div className="text-center">Loading studies data...</div>
+    )
+  }
 
   return (
     <div className="w-80 mx-auto">
