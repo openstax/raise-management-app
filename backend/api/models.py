@@ -1,4 +1,4 @@
-from typing import Union, Optional, List
+from typing import Optional, List
 from pydantic import BaseModel
 from enum import Enum
 
@@ -13,7 +13,7 @@ class StudyBase(BaseModel):
     """Common base study model"""
     title: str
     description: str
-    configuration: Union[StudyQualtricsConfig]
+    configuration: StudyQualtricsConfig
 
 
 class StudyCreate(StudyBase):
