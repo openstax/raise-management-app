@@ -11,6 +11,7 @@ export COGNITO_CLIENT_ID=clientid
 INSTALL_DEV=true docker-compose build api
 docker-compose down -v --remove-orphans
 docker-compose up -d api
+docker-compose exec -T postgres timeout 10 bash -c "until pg_isready; do sleep 1; done;"
 docker-compose exec -T api alembic upgrade head
 docker-compose exec -T api pytest --cov=api --cov-report=term --cov-report=html api/tests -vvv
 docker-compose down -v --remove-orphans
