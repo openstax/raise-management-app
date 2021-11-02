@@ -3,6 +3,7 @@ import * as fakeAuth from './fake-auth'
 
 export interface AuthenticatedUser {
   username: string
+  usergroups: string[]
   idToken: string
 }
 

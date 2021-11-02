@@ -13,7 +13,7 @@ const Signout = (): JSX.Element => {
   }
 
   return (
-    <button className="btn btn-outline-warning" type="button" onClick={handleSignout}>Signout</button>
+    <button className="btn btn-outline-warning" type="button" onClick={handleSignout}>Sign out</button>
   )
 }
 

@@ -2,9 +2,7 @@ import { AuthenticatedUser } from './auth'
 
 const FAKE_AUTH_LOCAL_STORAGE_KEY = 'FakeAuthUsername'
 
-function generateFakeJwtToken(username: string): string {
-  const header = btoa(JSON.stringify({}))
-  const signature = btoa('notarealsignature')
+function usernameToGroups(username: string): string[] {
   const usergroups = []
 
   if (username.includes('admin')) {
@@ -14,6 +12,13 @@ function generateFakeJwtToken(username: string): string {
   if (username.includes('researcher')) {
     usergroups.push('researcher')
   }
+
+  return usergroups
+}
+
+function generateFakeJwtToken(username: string, usergroups: string[]): string {
+  const header = btoa(JSON.stringify({}))
+  const signature = btoa('notarealsignature')
 
   const payload = btoa(JSON.stringify({
     token_use: 'id',
@@ -35,10 +40,13 @@ export async function authenticateUser(username: string, password: string): Prom
     throw new Error('Incorrect username or password')
   }
 
+  const usergroups = usernameToGroups(username)
+
   localStorage.setItem(FAKE_AUTH_LOCAL_STORAGE_KEY, username)
   return {
     username: username,
-    idToken: generateFakeJwtToken(username)
+    usergroups: usergroups,
+    idToken: generateFakeJwtToken(username, usergroups)
   }
 }
 
@@ -49,8 +57,11 @@ export async function getExistingSession(): Promise<AuthenticatedUser | null> {
     return null
   }
 
+  const usergroups = usernameToGroups(maybeUser)
+
   return {
     username: maybeUser,
-    idToken: generateFakeJwtToken(maybeUser)
+    usergroups: usergroups,
+    idToken: generateFakeJwtToken(maybeUser, usergroups)
   }
 }

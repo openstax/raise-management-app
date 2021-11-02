@@ -13,6 +13,7 @@ class Study(Base):
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     status = Column(String, nullable=False)
+    owner = Column(String, nullable=False)
     configuration = Column(JSONB, nullable=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow,

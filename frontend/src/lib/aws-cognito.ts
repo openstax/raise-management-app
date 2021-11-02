@@ -5,6 +5,7 @@ import { AuthenticatedUser } from './auth'
 import { ENV } from './env'
 
 const COGNITO_PAYLOAD_USERNAME_KEY = 'cognito:username'
+const COGNITO_PAYLOAD_GROUPS_KEY = 'cognito:groups'
 
 function getUserPool(): CognitoUserPool {
   return new CognitoUserPool({
@@ -16,8 +17,10 @@ function getUserPool(): CognitoUserPool {
 function getAuthenticedUserFromSession(session: CognitoUserSession): AuthenticatedUser {
   const idToken = session.getIdToken()
   const username = idToken.payload[COGNITO_PAYLOAD_USERNAME_KEY] as string
+  const usergroups = idToken.payload[COGNITO_PAYLOAD_GROUPS_KEY] as string[]
   return {
     username: username,
+    usergroups: usergroups,
     idToken: idToken.getJwtToken()
   }
 }

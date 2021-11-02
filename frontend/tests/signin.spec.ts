@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test'
-
-const TEST_SERVER_BASE_URL = 'http://localhost:3000'
+import { TEST_SERVER_BASE_URL } from './utils'
 
 test('signin redirects to studies on success', async ({ page }) => {
   await page.goto(TEST_SERVER_BASE_URL)
@@ -8,5 +7,5 @@ test('signin redirects to studies on success', async ({ page }) => {
   await page.fill('#password', 'admin1')
   await page.click('button')
 
-  await expect(page.url()).toMatch(`${TEST_SERVER_BASE_URL}/studies`)
+  expect(page.url()).toMatch(`${TEST_SERVER_BASE_URL}/studies`)
 })

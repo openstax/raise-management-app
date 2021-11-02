@@ -17,15 +17,21 @@ def get_db():
         db.close()
 
 
-def get_studies(db: Session) -> List[schema.Study]:
-    return db.query(schema.Study).all()
+def get_studies(
+    db: Session,
+    owner: Optional[str] = None
+) -> List[schema.Study]:
+    if owner:
+        return db.query(schema.Study).filter(schema.Study.owner == owner).all()
+    else:
+        return db.query(schema.Study).all()
 
 
 def get_study(db: Session, study_id: int) -> Optional[schema.Study]:
     return db.query(schema.Study).filter(schema.Study.id == study_id).first()
 
 
-def create_study(db: Session, study: models.Study) -> schema.Study:
+def create_study(db: Session, study: models.StudyCreate) -> schema.Study:
     db_study = schema.Study(**jsonable_encoder(study))
     db.add(db_study)
     db.commit()

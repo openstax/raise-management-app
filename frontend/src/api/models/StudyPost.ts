@@ -21,36 +21,36 @@ import {
 } from './';
 
 /**
- * Study creation model
+ * Study POST request model
  * @export
- * @interface StudyCreate
+ * @interface StudyPost
  */
-export interface StudyCreate {
+export interface StudyPost {
     /**
      * 
      * @type {string}
-     * @memberof StudyCreate
+     * @memberof StudyPost
      */
     title: string;
     /**
      * 
      * @type {string}
-     * @memberof StudyCreate
+     * @memberof StudyPost
      */
     description: string;
     /**
      * 
      * @type {StudyQualtricsConfig}
-     * @memberof StudyCreate
+     * @memberof StudyPost
      */
     _configuration: StudyQualtricsConfig;
 }
 
-export function StudyCreateFromJSON(json: any): StudyCreate {
-    return StudyCreateFromJSONTyped(json, false);
+export function StudyPostFromJSON(json: any): StudyPost {
+    return StudyPostFromJSONTyped(json, false);
 }
 
-export function StudyCreateFromJSONTyped(json: any, ignoreDiscriminator: boolean): StudyCreate {
+export function StudyPostFromJSONTyped(json: any, ignoreDiscriminator: boolean): StudyPost {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -62,7 +62,7 @@ export function StudyCreateFromJSONTyped(json: any, ignoreDiscriminator: boolean
     };
 }
 
-export function StudyCreateToJSON(value?: StudyCreate | null): any {
+export function StudyPostToJSON(value?: StudyPost | null): any {
     if (value === undefined) {
         return undefined;
     }
