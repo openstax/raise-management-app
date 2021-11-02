@@ -51,7 +51,7 @@ async def update_study_status(
     db: Session = Depends(database.get_db),
     user: models.UserData = Depends(auth.get_userdata)
 ):
-    # Only allow admin role to create studies
+    # Only allow admin role to update study status
     if (not user.is_admin):
         raise HTTPException(
             status_code=403, detail="Must be admin to update study status"
