@@ -39,8 +39,14 @@ async def list_studies(db: Session = Depends(database.get_db)):
 async def update_study_status(
     study_id: int,
     status: models.StudyStatus,
-    db: Session = Depends(database.get_db)
+    db: Session = Depends(database.get_db),
+    user: models.UserData = Depends(auth.get_userdata)
 ):
+    # Only allow admin role to create studies
+    if (not user.is_admin):
+        raise HTTPException(
+            status_code=403, detail="Must be admin to update study status"
+        )
     study = database.get_study(db, study_id)
     if study is None:
         raise HTTPException(status_code=404, detail="Study not found")

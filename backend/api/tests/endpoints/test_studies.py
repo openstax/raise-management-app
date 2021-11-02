@@ -70,7 +70,7 @@ def test_get_studies(
     assert expected_study_ids <= returned_study_ids
 
 
-def test_put_studies_status(
+def test_put_studies_status_admin(
     client: TestClient,
     db: Session,
     admin_header_factory: Callable[[str], Dict]
@@ -88,6 +88,24 @@ def test_put_studies_status(
     assert response.status_code == 200
     content = response.json()
     assert content["status"] == "DENIED"
+
+
+def test_put_studies_status_researcher(
+    client: TestClient,
+    db: Session,
+    researcher_header_factory: Callable[[str], Dict]
+):
+    study = create_random_study(db)
+    data = {
+        "status": "APPROVED"
+    }
+    response = client.put(
+        f"/studies/{study.id}/status",
+        headers=researcher_header_factory("researchuser"),
+        json=data
+    )
+
+    assert response.status_code == 403
 
 
 def test_put_studies_status_404(
