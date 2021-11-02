@@ -48,7 +48,7 @@ const SigninForm = (): JSX.Element => {
         usergroups: user.usergroups
       }))
     } catch (error: any) {
-      setSigninError(error.message)
+      setSigninError(String(error))
       actions.resetForm()
     }
   }
@@ -66,8 +66,8 @@ const SigninForm = (): JSX.Element => {
           dispatch(signout())
         }
       }
-      checkForSession().catch((error: Error) => {
-        setSigninError(error.message)
+      checkForSession().catch((error: any) => {
+        setSigninError(String(error))
         dispatch(signout())
       })
     }
