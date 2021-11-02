@@ -4,10 +4,6 @@ from sqlalchemy.orm import Session
 from api.tests.utils import create_random_study, random_string
 
 
-def study_generator(name: str) -> dict:
-    return
-
-
 def test_post_studies_researcher(
     client: TestClient,
     researcher_header_factory: Callable[[str], Dict]
