@@ -2,7 +2,7 @@ import { useHistory } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useState } from 'react'
 import * as Yup from 'yup'
-import { useStudiesApi } from '../lib/api-config'
+import { useStudiesApi, getApiErrorMessage } from '../lib/api-config'
 
 interface StudyValues {
   title: string
@@ -45,8 +45,7 @@ const StudyForm = (): JSX.Element => {
       await studiesApi.createStudyStudiesPost({ studyCreate: newStudy })
       history.goBack()
     } catch (error: any) {
-      const errorMsg = (error instanceof Response) ? (await error.json()).detail : String(error)
-      setformError(errorMsg)
+      setformError(await getApiErrorMessage(error))
     }
   }
 

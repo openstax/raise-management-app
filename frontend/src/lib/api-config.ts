@@ -21,3 +21,7 @@ export const useStudiesApi = (): StudiesApi => {
 
   return api
 }
+
+export const getApiErrorMessage = async (error: any): Promise<string> => {
+  return (error instanceof Response) ? (await error.json()).detail : String(error)
+}
