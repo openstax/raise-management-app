@@ -116,6 +116,7 @@ const StudiesListing = (): JSX.Element => {
       <button
         className="btn btn-outline-success rounded-circle me-2"
         type="button"
+        id="newstudy"
         onClick={() => history.push('/studies/new')}
       >
         <Plus />
