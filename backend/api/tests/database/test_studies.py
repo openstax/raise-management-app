@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from api.models import StudyCreate, StudyStatusValues
 from api import database
-from api.tests.utils import create_random_study
+from api.tests.utils import create_random_study, random_string
 
 
 def test_create_study(db: Session):
@@ -40,6 +40,15 @@ def test_get_studies(db: Session):
     for study in studies:
         returned_study_ids.add(study.id)
     assert created_study_ids <= returned_study_ids
+
+
+def test_get_studies_with_owner(db: Session):
+    random_users = [f"user{random_string(5)}" for _ in range(5)]
+    for username in random_users:
+        create_random_study(db, username)
+    studies = database.get_studies(db, owner=random_users[0])
+    assert len(studies) == 1
+    assert studies[0].owner == random_users[0]
 
 
 def test_update_study_status(db: Session):

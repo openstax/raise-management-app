@@ -13,7 +13,7 @@ def create_random_study(
     db: Session,
     username: Optional[str] = None
 ) -> schema.Study:
-    owner = username or 'randomuser'
+    owner = username or random_string(10)
     random_study = models.StudyCreate(
         title=random_string(16),
         description=random_string(200),

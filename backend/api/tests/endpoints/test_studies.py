@@ -1,7 +1,7 @@
 from typing import Dict, Callable
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
-from api.tests.utils import create_random_study
+from api.tests.utils import create_random_study, random_string
 
 
 def study_generator(name: str) -> dict:
@@ -50,7 +50,7 @@ def test_post_studies_admin(
     assert response.status_code == 403
 
 
-def test_get_studies(
+def test_get_studies_admin(
     client: TestClient,
     db: Session,
     admin_header_factory: Callable[[str], Dict]
@@ -68,6 +68,23 @@ def test_get_studies(
     for study in studies:
         returned_study_ids.add(study["id"])
     assert expected_study_ids <= returned_study_ids
+
+
+def test_get_studies_researcher(
+    client: TestClient,
+    db: Session,
+    researcher_header_factory: Callable[[str], Dict]
+):
+    random_users = [f"researcher{random_string(5)}" for _ in range(5)]
+    for username in random_users:
+        create_random_study(db, username)
+    auth_header = researcher_header_factory(random_users[0])
+    response = client.get("/studies", headers=auth_header)
+
+    assert response.status_code == 200
+    studies = response.json()
+    assert len(studies) == 1
+    assert studies[0]["owner"] == random_users[0]
 
 
 def test_put_studies_status_admin(

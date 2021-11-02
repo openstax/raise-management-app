@@ -31,8 +31,17 @@ async def create_study(
 
 
 @studies_router.get("/", response_model=List[models.Study])
-async def list_studies(db: Session = Depends(database.get_db)):
-    return database.get_studies(db)
+async def list_studies(
+    db: Session = Depends(database.get_db),
+    user: models.UserData = Depends(auth.get_userdata)
+):
+    if user.is_admin:
+        return database.get_studies(db)
+
+    if user.is_researcher:
+        return database.get_studies(db, user.username)
+
+    return []
 
 
 @studies_router.put("/{study_id}/status", response_model=models.Study)
