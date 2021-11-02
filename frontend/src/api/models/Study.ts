@@ -59,7 +59,7 @@ export interface Study {
      * @type {number}
      * @memberof Study
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {string}
@@ -82,7 +82,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'title': json['title'],
         'description': json['description'],
         '_configuration': StudyQualtricsConfigFromJSON(json['configuration']),
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'],
         'owner': json['owner'],
     };
 }

@@ -42,7 +42,7 @@ const StudyForm = (): JSX.Element => {
       }
 
       setformError('')
-      await studiesApi.createStudyStudiesPost({ studyCreate: newStudy })
+      await studiesApi.createStudyStudiesPost({ studyPost: newStudy })
       history.goBack()
     } catch (error: any) {
       setformError(await getApiErrorMessage(error))

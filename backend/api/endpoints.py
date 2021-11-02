@@ -10,7 +10,7 @@ studies_router = APIRouter()
 
 @studies_router.post("/", status_code=201, response_model=models.Study)
 async def create_study(
-    study: models.StudyCreate,
+    study: models.StudyPost,
     db: Session = Depends(database.get_db),
     user: models.UserData = Depends(auth.get_userdata)
 ):
@@ -21,7 +21,7 @@ async def create_study(
         )
 
     # Set initial study status
-    new_study = models.Study(
+    new_study = models.StudyCreate(
         **study.dict(),
         status=models.StudyStatusValues.submitted,
         owner=user.username

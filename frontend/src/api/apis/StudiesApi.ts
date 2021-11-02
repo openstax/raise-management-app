@@ -21,16 +21,16 @@ import {
     Study,
     StudyFromJSON,
     StudyToJSON,
-    StudyCreate,
-    StudyCreateFromJSON,
-    StudyCreateToJSON,
+    StudyPost,
+    StudyPostFromJSON,
+    StudyPostToJSON,
     StudyStatus,
     StudyStatusFromJSON,
     StudyStatusToJSON,
 } from '../models';
 
 export interface CreateStudyStudiesPostRequest {
-    studyCreate: StudyCreate;
+    studyPost: StudyPost;
 }
 
 export interface UpdateStudyStatusStudiesStudyIdStatusPutRequest {
@@ -47,8 +47,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Create Study
      */
     async createStudyStudiesPostRaw(requestParameters: CreateStudyStudiesPostRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Study>> {
-        if (requestParameters.studyCreate === null || requestParameters.studyCreate === undefined) {
-            throw new runtime.RequiredError('studyCreate','Required parameter requestParameters.studyCreate was null or undefined when calling createStudyStudiesPost.');
+        if (requestParameters.studyPost === null || requestParameters.studyPost === undefined) {
+            throw new runtime.RequiredError('studyPost','Required parameter requestParameters.studyPost was null or undefined when calling createStudyStudiesPost.');
         }
 
         const queryParameters: any = {};
@@ -70,7 +70,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: StudyCreateToJSON(requestParameters.studyCreate),
+            body: StudyPostToJSON(requestParameters.studyPost),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));

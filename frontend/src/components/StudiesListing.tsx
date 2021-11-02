@@ -36,7 +36,7 @@ const StudiesListing = (): JSX.Element => {
         setCurrentError('')
         setCurrentMessage('Updating...')
         const updatedStudy = await studiesApi.updateStudyStatusStudiesStudyIdStatusPut({
-          studyId: study.id as number,
+          studyId: study.id,
           studyStatus: {
             status: status
           }

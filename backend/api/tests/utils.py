@@ -14,7 +14,7 @@ def create_random_study(
     username: Optional[str] = None
 ) -> schema.Study:
     owner = username or 'randomuser'
-    random_study = models.Study(
+    random_study = models.StudyCreate(
         title=random_string(16),
         description=random_string(200),
         status=models.StudyStatusValues.submitted,

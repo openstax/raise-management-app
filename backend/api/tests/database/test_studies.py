@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
-from api.models import Study, StudyStatusValues
+from api.models import StudyCreate, StudyStatusValues
 from api import database
 from api.tests.utils import create_random_study
 
 
 def test_create_study(db: Session):
-    input_study = Study(
+    input_study = StudyCreate(
         title="Test study title",
         description="Test study description",
         status=StudyStatusValues.submitted,

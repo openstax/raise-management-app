@@ -1,9 +1,10 @@
+.openapi-generator-ignore
 apis/StudiesApi.ts
 apis/index.ts
 index.ts
 models/HTTPValidationError.ts
 models/Study.ts
-models/StudyCreate.ts
+models/StudyPost.ts
 models/StudyQualtricsConfig.ts
 models/StudyStatus.ts
 models/StudyStatusValues.ts

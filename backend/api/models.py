@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List
 from pydantic import BaseModel
 from enum import Enum
 
@@ -16,8 +16,8 @@ class StudyBase(BaseModel):
     configuration: StudyQualtricsConfig
 
 
-class StudyCreate(StudyBase):
-    """Study creation model"""
+class StudyPost(StudyBase):
+    """Study POST request model"""
     pass
 
 
@@ -33,9 +33,14 @@ class StudyStatus(BaseModel):
     status: StudyStatusValues
 
 
+class StudyCreate(StudyBase, StudyStatus):
+    """Study create model"""
+    owner: str
+
+
 class Study(StudyBase, StudyStatus):
     """Study response model"""
-    id: Optional[int] = None
+    id: int
     owner: str
 
     class Config:
