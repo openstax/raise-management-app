@@ -8,30 +8,25 @@ Install the following in your environment as needed:
 
 To launch a local development environment using the provided `docker-compose.yml`, you first need to set environment variable values that will determine how the application authenticates users. There are two alternatives:
 
-1. Use AWS Cognito user pool resources
-    * Users are currently created and initialized using the `aws` CLI
-    * The roles associated with a user are configured via Cognito groups and included in the JWT passed back
-    * The backend will verify the JWT passed for authentication
-2. Use a fake authenticator (for local dev use and CI only)
+1. Use a fake authenticator (for local dev use and CI only)
     * The user password is the same as the username (e.g. test bad credentials with any other value)
     * The roles associated with a user in the fake JWT are determined based upon the username for simplicity / ease of testing (e.g. for an admin user the username should include the string `admin`)
     * The backend will not verify the JWT and blindly consume any claims.
 
-To setup AWS Cognito, configure the following environment variables with appropriate values:
+2. Use AWS Cognito user pool resources
+    * Users are currently created and initialized using the `aws` CLI
+    * The roles associated with a user are configured via Cognito groups and included in the JWT passed back
+    * The backend will verify the JWT passed for authentication
 
-```bash
-$ export COGNITO_AWS_REGION=<value>
-$ export COGNITO_USER_POOL_ID=<value>
-$ export COGNITO_CLIENT_ID=<value>
-```
+By default, the environment will use the fake authenticator.
 
-To setup the fake authenticator, set the following environment variable (note that this variable takes precedence over any Cognito settings):
+To set up AWS Cognito, set the `FAKE_AUTH_MODE` variable to `0` in the `.env` file at the root of this repo. Note that this variable takes precedence over any Cognito settings, so you must explicitly set it to `0` if you want to test locally with Cognito. In addition, you must configure the following values in the `.env` file:
 
-```bash
-$ export FAKE_AUTH_MODE=1
-```
+* COGNITO_AWS_REGION
+* COGNITO_USER_POOL_ID
+* COGNITO_CLIENT_ID
 
-Once the environment variables are set as desired, the application can be brought up with `docker-compose`:
+Once the variables in `.env` are set as desired, the application can be brought up with `docker-compose`:
 
 ```bash
 $ docker-compose up -d

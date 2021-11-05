@@ -31,9 +31,9 @@ services:
     depends_on:
       - postgres
     environment:
-      - POSTGRES_USER=raise
-      - POSTGRES_PASSWORD=raise
-      - POSTGRES_DB=raise_mgmt
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
       - POSTGRES_SERVER=postgres
       - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5000
       - COGNITO_AWS_REGION
@@ -47,9 +47,9 @@ services:
     networks:
       - raise
     environment:
-      - POSTGRES_USER=raise
-      - POSTGRES_PASSWORD=raise
-      - POSTGRES_DB=raise_mgmt
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
 networks:
   raise:
 volumes:

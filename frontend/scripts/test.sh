@@ -5,10 +5,10 @@ set -e
 # Print commands to help with debugging
 set -x
 
-export FAKE_AUTH_MODE=1
 docker-compose build
 docker-compose down -v --remove-orphans
 docker-compose up -d
+docker-compose exec -T postgres timeout 10 bash -c "until pg_isready; do sleep 1; done;"
 docker-compose exec -T api alembic upgrade head
-npm test
+npm -C frontend test
 docker-compose down -v --remove-orphans

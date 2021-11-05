@@ -30,6 +30,5 @@ jobs:
           npm install
           npx playwright install chromium
       - name: Run tests
-        working-directory: ./frontend
         run: |
-          ./scripts/test.sh
+          ./frontend/scripts/test.sh
