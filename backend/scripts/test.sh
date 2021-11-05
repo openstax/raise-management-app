@@ -8,6 +8,7 @@ set -x
 export COGNITO_AWS_REGION=awsregion
 export COGNITO_USER_POOL_ID=userpoolid
 export COGNITO_CLIENT_ID=clientid
+export FAKE_AUTH_MODE=0
 INSTALL_DEV=true docker-compose build api
 docker-compose down -v --remove-orphans
 docker-compose up -d api

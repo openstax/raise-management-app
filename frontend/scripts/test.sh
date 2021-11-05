@@ -5,7 +5,6 @@ set -e
 # Print commands to help with debugging
 set -x
 
-export FAKE_AUTH_MODE=1
 docker-compose build
 docker-compose down -v --remove-orphans
 docker-compose up -d
