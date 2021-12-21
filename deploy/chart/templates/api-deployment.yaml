@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: rma-backend
-          image: REPLACED_IN_PIPELINE
+          image: {{ .Values.backendImage }}
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -31,13 +31,13 @@ spec:
             - name: POSTGRES_DB
               value: rma
             - name: POSTGRES_SERVER
-              value: REPLACED_IN_PIPELINE
+              value: {{ .Values.pgServer }}
             - name: COGNITO_AWS_REGION
-              value: REPLACED_IN_PIPELINE
+              value: {{ .Values.cognitoRegion }}
             - name: COGNITO_USER_POOL_ID
-              value: REPLACED_IN_PIPELINE
+              value: {{ .Values.cognitoUserPoolId }}
             - name: COGNITO_CLIENT_ID
-              value: REPLACED_IN_PIPELINE
+              value: {{ .Values.cognitoClientId }}
           command:
             - uvicorn
           args:

@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: rma-frontend
-          image: REPLACED_IN_PIPELINE
+          image: {{ .Values.frontendImage }}
           ports:
             - containerPort: 80
