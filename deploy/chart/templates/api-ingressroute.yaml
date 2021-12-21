@@ -8,7 +8,7 @@ spec:
   tls:
     secretName: rma-dev.raise.openstax.org-tls
   routes:
-    - match: REPLACED_IN_PIPELINE
+    - match: "Host(`{{ .Values.domain }}`) && PathPrefix(`/api`)"
       kind: Rule
       middlewares:
         - name: rma-api-strip-prefix
@@ -25,7 +25,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: REPLACED_IN_PIPELINE
+    - match: "Host(`{{ .Values.domain }}`) && PathPrefix(`/api`)"
       kind: Rule
       middlewares:
         - name: rma-http-redirect
